@@ -4,26 +4,46 @@ const {
   groupListEntityConverter,
   selectedSlotDBConverter,
 } = require("../helpers/entity_mapping/calendarMapping.js");
+const { CalendarGroup } = require("../schemas/calendar");
 
 class CalendarStore {
   static _instance;
-  /* The currently selected calendar */
+  /**
+   * The currently selected calendar list
+   * @type {Calendar[]}
+   */
   selectedCalList = [];
 
-  /* The currently selected group */
+  /**
+   * The ID of the currently selected group
+   * @type {string}
+   */
   selectedGroup;
 
-  /* The currently selected group HTML element in sidebar */
+  /**
+   * The currently selected group HTML element in sidebar
+   * @type {HTMLElement}
+   */
   selectedGroupElem;
 
-  /* List of all groups and its associated calendars */
+  /**
+   * List of all groups and its associated calendars
+   * @type {CalendarGroup[]}
+   */
   groupList = [];
 
   /**
    * Retrieves all groups from the database and stores it in the groupList
    */
   async retrieveGroups() {
-    const res = await fetch("/api/group");
+    const res = await fetch("/api/group", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        "Refresh": localStorage.getItem("refresh_token"),
+      },
+    });
     const groups = await res.json();
 
     const groupEntityList = groups.map((group) =>
@@ -42,8 +62,13 @@ class CalendarStore {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        "Refresh": localStorage.getItem("refresh_token"),
       },
-      body: JSON.stringify({ name: newGroup.name }),
+      body: JSON.stringify({
+        name: newGroup.name,
+        owner_id: localStorage.getItem("user_id"),
+      }),
     });
 
     if (!res.ok) {
@@ -70,6 +95,8 @@ class CalendarStore {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+        "Refresh": localStorage.getItem("refresh_token"),
       },
     });
 

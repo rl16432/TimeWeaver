@@ -52,6 +52,21 @@ const addFilterModal = $.modal({
   `,
 });
 
+/** Fomantic Modal Designs for inviting users to group*/
+const inviteUsersModal = $.modal({
+  title: "Invite Users",
+  ...commonModalAttributes,
+  content: `
+  <p>Click to copy this link and send it to your friends to invite them to your group!</p>
+  <div class="ui labeled input">
+    <input id="invite-link" type="text" placeholder="You should not be seeing this placeholder text." readonly>
+  </div>  
+
+  <br></br>
+  <div id="close-invite-users-modal" class="ui approve button green">Done</div>
+  `,
+});
+
 /** Fomantic Modal Designs for adding new calendar manually*/
 const addIcalModal = $.modal({
   title: "Add Ical Link",
@@ -463,8 +478,14 @@ const accountModal = $.modal({
   ...commonModalAttributes,
   content: `
   <div id="myaccount-popup">
-    <span id="name-info"></span>
-    <span id="email-info"></span>
+    <div class="myaccount-info-box" >
+      <span style="font-weight: bold" >Name:</span>
+      <span id="name-info"></span>
+    </div>
+    <div class="myaccount-info-box">
+      <span style="font-weight: bold" >Email:</span>
+      <span id="email-info"></span>
+    </div>
     <div class="ui approve button green" id="logout-btn" >LOG OUT</div>  
   <div>`,
 });
@@ -472,6 +493,7 @@ const accountModal = $.modal({
 module.exports = {
   addGroupModal,
   addFilterModal,
+  inviteUsersModal,
   addManualModal,
   addIcalModal,
   formatModal,

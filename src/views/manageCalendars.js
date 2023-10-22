@@ -63,6 +63,11 @@ function resetCalendar() {
 
 /** Handles the Display of the Add Calendar Modal */
 function addCalendar() {
+  // Don't allow creation of a new calendar if the user is not logged in
+  if (localStorage.getItem("access_token") === null) {
+    alert("You need to be logged in to create a calendar.");
+    return;
+  }
   formatModal.modal("show");
 }
 
@@ -125,6 +130,13 @@ function viewFilteredCalendar(filterValue) {
 
 /** Handles the setup of a new Calendar based on the Ical Link */
 async function setupNewIcal(calList) {
+  // Check if the name is any duplicate, or if the name is empty. Alert the user if so.
+  const duplicate = calList.filter((x) => x.user === icalName.value);
+  if (duplicate.length > 0 || icalName.value === "") {
+    alert("Please enter a valid name");
+    return;
+  }
+
   addIcalModal.modal("hide");
 
   const icalUrl = icalInput.value;
@@ -167,6 +179,13 @@ function applyNewFormat(date) {
 
 /** Handles setup of a new Calendar based on the Manual Input */
 function setupNewManual(calList) {
+  // Check if the name is any duplicate, or if the name is empty. Alert the user if so.
+  const duplicate = calList.filter((x) => x.user === manualName.value);
+  if (duplicate.length > 0 || manualName.value === "") {
+    alert("Please enter a valid name");
+    return;
+  }
+
   addManualModal.modal("hide");
 
   // Creates a cell object for each cell in the cellList array
